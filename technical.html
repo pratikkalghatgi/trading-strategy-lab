@@ -1,0 +1,210 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trading Strategy Lab</title>
+    <meta
+      name="description"
+      content="Trading Strategy Lab is an educational static website to learn and simulate 16 trading strategies directly in your browser."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://unpkg.com/lightweight-charts@4.2.2/dist/lightweight-charts.standalone.production.js" defer></script>
+    <script src="data.js" defer></script>
+    <script src="indicators.js" defer></script>
+    <script src="strategies.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body data-theme="light">
+    <div class="background-glow"></div>
+
+    <div class="app-shell">
+      <header class="top-header">
+        <div>
+          <h1>Trading Strategy Lab</h1>
+          <p class="tagline">Learn, visualize, and simulate trading setups with step-by-step educational playback.</p>
+        </div>
+        <div class="header-actions">
+          <a class="theme-toggle" href="fundamental.html">Fundamental Filter</a>
+          <button id="themeToggle" class="theme-toggle" type="button">Dark mode</button>
+        </div>
+      </header>
+
+      <nav class="top-nav" aria-label="Primary">
+        <button class="nav-tab" data-section="strategies" type="button">Strategies</button>
+        <button class="nav-tab active" data-section="simulator" type="button">Simulator</button>
+      </nav>
+
+      <main>
+        <section id="learn" class="app-section">
+          <div class="card-grid three">
+            <article class="panel card">
+              <h2>How to use the lab</h2>
+              <p>
+                Pick a strategy, review the setup checklist, adjust parameters, then run the simulation to see entries,
+                stops, targets, and outcomes.
+              </p>
+            </article>
+            <article class="panel card">
+              <h2>Built for education</h2>
+              <p>
+                The simulator follows transparent rules: entry at next open, intrabar stop/target checks, and optional
+                multi-position mode.
+              </p>
+            </article>
+            <article class="panel card">
+              <h2>Offline-ready data</h2>
+              <p>
+                Synthetic OHLCV data is generated locally and aggregated into multiple timeframes so practice works with
+                no backend.
+              </p>
+            </article>
+          </div>
+        </section>
+
+        <section id="strategies" class="app-section">
+          <div class="panel strategy-layout">
+            <aside class="strategy-list-wrap">
+              <div class="section-head">
+                <h2>16 Strategies</h2>
+                <p>Search and open a strategy to inspect structure and checklist rules.</p>
+              </div>
+              <input id="strategySearch" class="search-input" type="search" placeholder="Search strategies..." />
+              <div id="strategyList" class="strategy-list"></div>
+            </aside>
+            <div id="strategyDetail" class="strategy-detail"></div>
+          </div>
+        </section>
+
+        <section id="simulator" class="app-section active">
+          <div class="sim-grid">
+            <aside class="panel simulator-controls">
+              <div class="section-head">
+                <h2>Simulator</h2>
+                <p>Choose a strategy, tune parameters, and run the educational backtest.</p>
+              </div>
+
+              <div class="field">
+                <label for="simStrategy">Strategy</label>
+                <select id="simStrategy"></select>
+              </div>
+
+              <div class="field-row">
+                <div class="field">
+                  <label for="simTimeframe">Timeframe</label>
+                  <select id="simTimeframe"></select>
+                </div>
+                <label class="toggle-field" for="allowMultiple">
+                  <input id="allowMultiple" type="checkbox" />
+                  <span>Allow multiple trades</span>
+                </label>
+              </div>
+
+              <div id="parametersWrap" class="parameters-wrap"></div>
+
+              <button id="runSimulation" class="run-button" type="button">Run Simulation</button>
+            </aside>
+
+            <div class="panel chart-panel">
+              <div class="chart-header">
+                <h3>Candlestick Debug View</h3>
+                <p id="statusPanel">Candle: 0 | Price: n/a</p>
+              </div>
+
+              <div class="chart-toolbar">
+                <select id="strategySelect" aria-label="Strategy"></select>
+                <select id="stockSelect" aria-label="Stock"></select>
+                <button id="runBtn" type="button">Run</button>
+                <button id="resetBtn" type="button">Reset</button>
+                <button id="nextBtn" type="button">Next Candle</button>
+                <button id="playBtn" type="button">Play</button>
+                <button id="pauseBtn" type="button">Pause</button>
+              </div>
+
+              <div class="stock-search-bar">
+                <input id="stockSearch" type="search" placeholder="Search S&amp;P 500 stocks… (e.g. AAPL, Apple)" autocomplete="off" />
+                <span id="stockSearchCount" class="stock-search-count"></span>
+              </div>
+              <div id="stockColumns" class="stock-columns"></div>
+
+              <div class="overlay-toolbar">
+                <label><input id="toggleSma50" type="checkbox" checked /> <span class="indicator-chip sma50">SMA 50</span></label>
+                <label><input id="toggleSma200" type="checkbox" checked /> <span class="indicator-chip sma200">SMA 200</span></label>
+                <label><input id="toggleBb" type="checkbox" checked /> <span class="indicator-chip bb">Bollinger (20,2)</span></label>
+                <label><input id="toggleVwap" type="checkbox" checked /> <span class="indicator-chip vwap">VWAP</span></label>
+              </div>
+
+              <div id="chartError" class="chart-error" hidden></div>
+
+              <div class="chart-shell">
+                <div id="chart"></div>
+              </div>
+
+              <div class="macd-shell">
+                <div class="macd-head">MACD (12,26,9)</div>
+                <div id="macdChart"></div>
+              </div>
+
+              <div class="results-grid">
+                <article class="result-card">
+                  <span>Number of trades</span>
+                  <strong id="metricTrades">0</strong>
+                </article>
+                <article class="result-card">
+                  <span>Win rate</span>
+                  <strong id="metricWinRate">0%</strong>
+                </article>
+                <article class="result-card">
+                  <span>Average return / trade</span>
+                  <strong id="metricAvgReturn">0%</strong>
+                </article>
+                <article class="result-card">
+                  <span>Max drawdown estimate</span>
+                  <strong id="metricDrawdown">0%</strong>
+                </article>
+              </div>
+
+              <div class="step-controls">
+                <button id="nextCandle" type="button">Next Candle</button>
+                <button id="playSimulation" type="button">Play</button>
+                <button id="pauseSimulation" type="button">Pause</button>
+                <button id="resetSimulation" type="button">Reset</button>
+              </div>
+
+              <article id="explanationPanel" class="explanation-panel"></article>
+            </div>
+          </div>
+        </section>
+
+        <section id="about" class="app-section">
+          <div class="card-grid two">
+            <article class="panel card">
+              <h2>What this project is</h2>
+              <p>
+                Trading Strategy Lab is a browser-only educational tool. It combines strategy playbooks, indicator
+                overlays, and a simple rule-based simulation engine.
+              </p>
+            </article>
+            <article class="panel card">
+              <h2>How results are generated</h2>
+              <p>
+                Signals are produced by deterministic indicator rules in JavaScript. Results are approximate and designed
+                for learning rather than production-grade execution modeling.
+              </p>
+            </article>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Educational only, not financial advice.</p>
+      </footer>
+    </div>
+  </body>
+</html>

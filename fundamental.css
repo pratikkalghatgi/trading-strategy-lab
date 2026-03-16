@@ -1,0 +1,231 @@
+.fund-main {
+  display: grid;
+  gap: 14px;
+}
+
+.fund-panel {
+  padding: 16px;
+}
+
+.us-data-controls {
+  display: grid;
+  gap: 10px;
+}
+
+.data-status {
+  margin: 10px 0 0;
+  color: var(--muted);
+  font-size: 0.88rem;
+}
+
+.data-status.error {
+  color: var(--negative);
+}
+
+.data-status.success {
+  color: var(--positive);
+}
+
+.preset-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.preset-btn {
+  border: 1px solid var(--border);
+  background: var(--panel);
+  color: var(--text);
+  border-radius: 999px;
+  padding: 8px 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.preset-btn.active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-soft);
+}
+
+.query-preview {
+  margin: 0;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: var(--muted);
+  white-space: pre-wrap;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  background: color-mix(in srgb, var(--panel) 92%, transparent);
+}
+
+.fund-filters {
+  margin-top: 10px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+  gap: 10px;
+}
+
+.fund-filters .field {
+  gap: 6px;
+}
+
+.fund-filters .field span {
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+
+.fund-actions {
+  margin-top: 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.secondary-btn {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: var(--panel);
+  color: var(--text);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+}
+
+.metric-card {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.metric-card span {
+  font-size: 0.83rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 700;
+}
+
+.metric-card strong {
+  font-family: "Sora", sans-serif;
+  font-size: 1.3rem;
+}
+
+.table-wrap {
+  margin-top: 10px;
+  overflow: auto;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+}
+
+.result-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 1180px;
+  background: var(--panel);
+}
+
+.result-table th,
+.result-table td {
+  border-bottom: 1px solid var(--border);
+  padding: 10px;
+  text-align: left;
+  font-size: 0.85rem;
+  white-space: nowrap;
+}
+
+.result-table tbody tr:hover {
+  background: color-mix(in srgb, var(--accent-soft) 45%, transparent);
+}
+
+.sort-btn {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-weight: 700;
+  font-size: 0.78rem;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  padding: 0;
+}
+
+.sort-btn.active {
+  color: var(--accent);
+}
+
+.company-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.company-name {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.company-symbol {
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+
+.value-positive {
+  color: var(--positive);
+  font-weight: 700;
+}
+
+.value-negative {
+  color: var(--negative);
+  font-weight: 700;
+}
+
+.score-pill {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 54px;
+  padding: 4px 10px;
+  font-weight: 700;
+  color: var(--text);
+  background: color-mix(in srgb, var(--accent-soft) 45%, transparent);
+}
+
+.play-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  color: var(--accent);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.play-link:hover {
+  background: color-mix(in srgb, var(--accent-soft) 35%, transparent);
+}
+
+@media (max-width: 760px) {
+  .query-preview {
+    font-size: 0.8rem;
+  }
+
+  .fund-actions .run-button,
+  .fund-actions .secondary-btn {
+    width: 100%;
+  }
+}

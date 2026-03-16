@@ -1,0 +1,168 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <title>Fundamental Analysis Filter | Trading Strategy Lab</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="fundamental.css" />
+    <script src="sp500_data.js"></script>
+    <script src="fundamental.js" defer></script>
+  </head>
+  <body data-theme="light">
+    <div class="background-glow"></div>
+    <div class="app-shell">
+      <header class="top-header">
+        <div>
+          <h1>Fundamental Analysis Filter</h1>
+          <p class="tagline">Screen S&P 500 companies by valuation, quality, growth, and balance-sheet strength.</p>
+        </div>
+        <div class="header-actions">
+          <a class="theme-toggle" href="technical.html">Open Technical Filter</a>
+          <button id="themeToggle" class="theme-toggle" type="button">Dark mode</button>
+        </div>
+      </header>
+
+      <main class="fund-main">
+        <section class="panel fund-panel">
+          <div class="section-head">
+            <h2>Preset Screens</h2>
+            <p>Quick-start filters inspired by Screener workflows.</p>
+          </div>
+          <div id="presetButtons" class="preset-buttons"></div>
+        </section>
+
+        <section class="panel fund-panel">
+          <div class="section-head">
+            <h2>Live Price Loader</h2>
+            <p>467 S&amp;P 500 stocks with baked-in fundamentals load instantly. Click to also fetch today's live EOD prices, P/E, P/B and market cap from Yahoo Finance.</p>
+          </div>
+          <div class="fund-actions">
+            <button id="loadUsStocksBtn" class="run-button" type="button">Fetch Live Prices (467 stocks)</button>
+            <button id="clearCacheBtn" class="secondary-btn" type="button">Clear Cache</button>
+          </div>
+          <p id="dataStatus" class="data-status">Loading baked-in data...</p>
+        </section>
+
+        <section class="panel fund-panel">
+          <div class="section-head">
+            <h2>Screen Query</h2>
+            <p>Live query preview from your filters.</p>
+          </div>
+          <pre id="queryPreview" class="query-preview"></pre>
+        </section>
+
+        <section class="panel fund-panel">
+          <div class="section-head">
+            <h2>Fundamental Filters</h2>
+            <p>Use any combination of quality, value, and growth constraints.</p>
+          </div>
+          <div class="fund-filters">
+            <label class="field">
+              <span>Company search</span>
+              <input id="searchInput" type="search" placeholder="e.g. Apple, NVDA, MSFT..." />
+            </label>
+            <label class="field">
+              <span>Sector</span>
+              <select id="sectorSelect"></select>
+            </label>
+            <label class="field">
+              <span>Min market cap ($M)</span>
+              <input id="minMarketCap" type="number" min="0" step="1000" placeholder="0" />
+            </label>
+            <label class="field">
+              <span>Max P/E</span>
+              <input id="maxPe" type="number" min="0" step="0.1" placeholder="No max" />
+            </label>
+            <label class="field">
+              <span>Min ROE %</span>
+              <input id="minRoe" type="number" min="0" step="0.1" placeholder="No min" />
+            </label>
+            <label class="field">
+              <span>Min ROCE %</span>
+              <input id="minRoce" type="number" min="0" step="0.1" placeholder="No min" />
+            </label>
+            <label class="field">
+              <span>Max debt/equity</span>
+              <input id="maxDebtEquity" type="number" min="0" step="0.01" placeholder="No max" />
+            </label>
+            <label class="field">
+              <span>Min sales growth 3Y %</span>
+              <input id="minSalesGrowth" type="number" step="0.1" placeholder="No min" />
+            </label>
+            <label class="field">
+              <span>Min EPS growth 3Y %</span>
+              <input id="minEpsGrowth" type="number" step="0.1" placeholder="No min" />
+            </label>
+            <label class="field">
+              <span>Min dividend yield %</span>
+              <input id="minDividendYield" type="number" min="0" step="0.1" placeholder="No min" />
+            </label>
+          </div>
+          <div class="fund-actions">
+            <button id="applyFiltersBtn" class="run-button" type="button">Apply Filters</button>
+            <button id="resetFiltersBtn" class="secondary-btn" type="button">Reset Filters</button>
+          </div>
+        </section>
+
+        <section class="metrics-grid">
+          <article class="panel metric-card">
+            <span>Matched companies</span>
+            <strong id="metricCount">0</strong>
+          </article>
+          <article class="panel metric-card">
+            <span>Average P/E</span>
+            <strong id="metricAvgPe">0</strong>
+          </article>
+          <article class="panel metric-card">
+            <span>Average ROE</span>
+            <strong id="metricAvgRoe">0%</strong>
+          </article>
+          <article class="panel metric-card">
+            <span>Average debt/equity</span>
+            <strong id="metricAvgDebt">0</strong>
+          </article>
+        </section>
+
+        <section class="panel fund-panel">
+          <div class="section-head">
+            <h2>Results</h2>
+            <p>Click any column header to sort.</p>
+          </div>
+          <div class="table-wrap">
+            <table class="result-table">
+              <thead>
+                <tr>
+                  <th><button class="sort-btn" data-sort="name" type="button">Company</button></th>
+                  <th><button class="sort-btn" data-sort="sector" type="button">Sector</button></th>
+                  <th><button class="sort-btn" data-sort="price" type="button">Price ($)</button></th>
+                  <th><button class="sort-btn" data-sort="marketCapCr" type="button">MCap ($M)</button></th>
+                  <th><button class="sort-btn" data-sort="pe" type="button">P/E</button></th>
+                  <th><button class="sort-btn" data-sort="pb" type="button">P/B</button></th>
+                  <th><button class="sort-btn" data-sort="roe" type="button">ROE %</button></th>
+                  <th><button class="sort-btn" data-sort="roce" type="button">ROCE %</button></th>
+                  <th><button class="sort-btn" data-sort="debtEquity" type="button">D/E</button></th>
+                  <th><button class="sort-btn" data-sort="salesGrowth3Y" type="button">Sales 3Y %</button></th>
+                  <th><button class="sort-btn" data-sort="epsGrowth3Y" type="button">EPS 3Y %</button></th>
+                  <th><button class="sort-btn" data-sort="dividendYield" type="button">Div Yield %</button></th>
+                  <th><button class="sort-btn" data-sort="score" type="button">Quality Score</button></th>
+                  <th>Technical</th>
+                </tr>
+              </thead>
+              <tbody id="resultTableBody"></tbody>
+            </table>
+          </div>
+          <div id="emptyState" class="empty-state" hidden>No companies matched your filters. Try relaxing one or two constraints.</div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Educational only, not financial advice.</p>
+      </footer>
+    </div>
+  </body>
+</html>
