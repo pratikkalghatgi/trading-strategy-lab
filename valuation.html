@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="no-referrer" />
+    <title>DCF Valuation Tool | Trading Strategy Lab</title>
+    <meta
+      name="description"
+      content="Estimate intrinsic value per share with a browser-based DCF valuation model, automatic company presets, scenario analysis, and editable assumptions."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Sora:wght@500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="fundamental.css" />
+    <link rel="stylesheet" href="valuation.css" />
+    <script src="sp500_data.js"></script>
+    <script src="valuation.js" defer></script>
+  </head>
+  <body data-theme="light">
+    <div class="background-glow"></div>
+    <div class="app-shell">
+      <header class="top-header">
+        <div>
+          <h1>DCF Valuation Tool</h1>
+          <p class="tagline">
+            Estimate intrinsic value per share for U.S. stocks with automatic company profiles, editable assumptions, and instant
+            bull/base/bear scenarios.
+          </p>
+        </div>
+        <div class="header-actions">
+          <a class="theme-toggle" href="fundamental.html">Fundamental Filter</a>
+          <a class="theme-toggle" href="technical.html">Technical Lab</a>
+          <button id="themeToggle" class="theme-toggle" type="button">Dark mode</button>
+        </div>
+      </header>
+
+      <main class="valuation-main">
+        <section class="panel valuation-hero fund-panel">
+          <div class="section-head">
+            <h2>Automatic Valuation Workspace</h2>
+            <p>
+              Start with a featured U.S. company model or auto-estimate any S&amp;P 500 ticker from the baked universe, then tune
+              the DCF in your browser.
+            </p>
+          </div>
+          <div id="heroChips" class="hero-chips"></div>
+        </section>
+
+        <section class="valuation-layout">
+          <aside class="panel valuation-controls">
+            <div class="section-head">
+              <h2>Company &amp; Assumptions</h2>
+              <p>Choose a company, review the starting snapshot, and edit the forecast model.</p>
+            </div>
+
+            <label class="field">
+              <span>Search company</span>
+              <div class="search-row">
+                <input id="companySearch" type="search" placeholder="AAPL, Apple, NVDA..." />
+                <button id="searchCompanyBtn" class="secondary-btn" type="button">Find</button>
+              </div>
+            </label>
+
+            <label class="field">
+              <span>Company</span>
+              <select id="companySelect"></select>
+            </label>
+
+            <article id="companySummary" class="company-summary"></article>
+
+            <div class="fund-actions compact-actions">
+              <button id="refreshQuoteBtn" class="secondary-btn" type="button">Refresh Live Price</button>
+              <button id="resetAssumptionsBtn" class="secondary-btn" type="button">Reset Snapshot</button>
+            </div>
+            <p id="quoteStatus" class="data-status">Featured U.S. presets load instantly. Live quote refresh is optional.</p>
+
+            <div class="control-group">
+              <div class="section-head compact-head">
+                <h3>Operating Snapshot</h3>
+                <p>Enter the current business size and capital structure in billions where noted.</p>
+              </div>
+              <div class="valuation-form-grid">
+                <label class="field">
+                  <span>Current price (USD)</span>
+                  <input id="currentPrice" type="number" min="0" step="0.01" />
+                </label>
+                <label class="field">
+                  <span>Revenue (USD B)</span>
+                  <input id="revenueB" type="number" min="0" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Operating margin %</span>
+                  <input id="operatingMargin" type="number" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Tax rate %</span>
+                  <input id="taxRate" type="number" min="0" max="60" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Cash (USD B)</span>
+                  <input id="cashB" type="number" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Debt (USD B)</span>
+                  <input id="debtB" type="number" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Shares outstanding (B)</span>
+                  <input id="sharesB" type="number" min="0.01" step="0.01" />
+                </label>
+                <label class="field">
+                  <span>Sales / capital (x)</span>
+                  <input id="salesToCapital" type="number" min="0.1" step="0.1" />
+                </label>
+              </div>
+            </div>
+
+            <div class="control-group">
+              <div class="section-head compact-head">
+                <h3>Forecast Inputs</h3>
+                <p>Growth fades in two stages across a 10-year FCFF forecast, then into a terminal value.</p>
+              </div>
+              <div class="valuation-form-grid">
+                <label class="field">
+                  <span>Growth year 1 %</span>
+                  <input id="growthStart" type="number" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Growth year 5 %</span>
+                  <input id="growthMid" type="number" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Target op margin %</span>
+                  <input id="targetOperatingMargin" type="number" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>WACC %</span>
+                  <input id="wacc" type="number" min="0.1" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Terminal growth %</span>
+                  <input id="terminalGrowth" type="number" step="0.1" />
+                </label>
+                <label class="field">
+                  <span>Margin of safety %</span>
+                  <input id="marginOfSafety" type="number" min="0" max="60" step="1" />
+                </label>
+              </div>
+            </div>
+          </aside>
+
+          <div class="valuation-content">
+            <section class="metrics-grid">
+              <article class="panel metric-card">
+                <span>Current Price (USD)</span>
+                <strong id="metricCurrentPrice">$0.00</strong>
+              </article>
+              <article class="panel metric-card">
+                <span>Intrinsic Value / Share (USD)</span>
+                <strong id="metricIntrinsicValue">$0.00</strong>
+              </article>
+              <article class="panel metric-card">
+                <span>Buy Below (USD)</span>
+                <strong id="metricBuyBelow">$0.00</strong>
+              </article>
+              <article class="panel metric-card">
+                <span>Upside / Downside</span>
+                <strong id="metricUpside">0.0%</strong>
+              </article>
+            </section>
+
+            <section class="panel fund-panel">
+              <div class="section-head">
+                <h2>Scenario Range</h2>
+                <p>Stress-test the same company with faster growth or a tougher discount-rate environment.</p>
+              </div>
+              <div id="scenarioGrid" class="scenario-grid"></div>
+            </section>
+
+            <section class="panel fund-panel">
+              <div class="section-head">
+                <h2>Valuation Bridge</h2>
+                <p id="valuationStatus">Forecast cash flows, terminal value, and balance-sheet adjustments roll into equity value.</p>
+              </div>
+              <div id="bridgeGrid" class="bridge-grid"></div>
+            </section>
+
+            <section class="panel fund-panel">
+              <div class="section-head">
+                <h2>Projection Engine</h2>
+                <p>Ten annual FCFF steps with revenue growth fade, margin convergence, and discounted present values.</p>
+              </div>
+              <div id="assumptionStrip" class="assumption-strip"></div>
+              <div class="table-wrap">
+                <table class="result-table valuation-table">
+                  <thead>
+                    <tr>
+                      <th>Year</th>
+                      <th>Growth %</th>
+                      <th>Revenue (USD B)</th>
+                      <th>Op Margin %</th>
+                      <th>EBIT (USD B)</th>
+                      <th>Reinvestment (USD B)</th>
+                      <th>FCFF (USD B)</th>
+                      <th>PV Factor</th>
+                      <th>PV FCFF (USD B)</th>
+                    </tr>
+                  </thead>
+                  <tbody id="projectionTableBody"></tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="panel fund-panel">
+              <div class="section-head">
+                <h2>Model Notes</h2>
+                <p>The tool uses a classic free-cash-flow-to-firm DCF. It is educational and should be checked against filings.</p>
+              </div>
+              <div id="warningStack" class="notice-stack"></div>
+              <div class="formula-panel">
+                <p><strong>FCFF</strong> = EBIT x (1 - tax rate) - reinvestment</p>
+                <p><strong>Reinvestment</strong> = change in revenue / sales-to-capital</p>
+                <p><strong>Terminal value</strong> = FCFF in year 11 / (WACC - terminal growth)</p>
+                <p class="formula-footnote">
+                  Banks, insurers, and REITs often work better with dividend or excess-return models than FCFF DCF.
+                </p>
+              </div>
+            </section>
+          </div>
+        </section>
+      </main>
+
+      <footer class="site-footer">
+        <p>Educational only, not financial advice.</p>
+      </footer>
+    </div>
+  </body>
+</html>

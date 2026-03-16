@@ -19,9 +19,10 @@
       <header class="top-header">
         <div>
           <h1>Fundamental Analysis Filter</h1>
-          <p class="tagline">Screen S&P 500 companies by valuation, quality, growth, and balance-sheet strength.</p>
+          <p class="tagline">Screen U.S. S&amp;P 500 companies by valuation, quality, growth, and balance-sheet strength.</p>
         </div>
         <div class="header-actions">
+          <a class="theme-toggle" href="valuation.html">Open DCF Tool</a>
           <a class="theme-toggle" href="technical.html">Open Technical Filter</a>
           <button id="themeToggle" class="theme-toggle" type="button">Dark mode</button>
         </div>
@@ -31,7 +32,7 @@
         <section class="panel fund-panel">
           <div class="section-head">
             <h2>Preset Screens</h2>
-            <p>Quick-start filters inspired by Screener workflows.</p>
+            <p>Quick-start filters for U.S. large-cap stocks.</p>
           </div>
           <div id="presetButtons" class="preset-buttons"></div>
         </section>
@@ -39,7 +40,7 @@
         <section class="panel fund-panel">
           <div class="section-head">
             <h2>Live Price Loader</h2>
-            <p>467 S&amp;P 500 stocks with baked-in fundamentals load instantly. Click to also fetch today's live EOD prices, P/E, P/B and market cap from Yahoo Finance.</p>
+            <p>467 U.S. S&amp;P 500 stocks with baked-in fundamentals load instantly. Click to also fetch live EOD prices, P/E, P/B and market cap from Yahoo Finance.</p>
           </div>
           <div class="fund-actions">
             <button id="loadUsStocksBtn" class="run-button" type="button">Fetch Live Prices (467 stocks)</button>
@@ -139,8 +140,8 @@
                 <tr>
                   <th><button class="sort-btn" data-sort="name" type="button">Company</button></th>
                   <th><button class="sort-btn" data-sort="sector" type="button">Sector</button></th>
-                  <th><button class="sort-btn" data-sort="price" type="button">Price ($)</button></th>
-                  <th><button class="sort-btn" data-sort="marketCapCr" type="button">MCap ($M)</button></th>
+                  <th><button class="sort-btn" data-sort="price" type="button">Price (USD)</button></th>
+                  <th><button class="sort-btn" data-sort="marketCapCr" type="button">MCap (USD M)</button></th>
                   <th><button class="sort-btn" data-sort="pe" type="button">P/E</button></th>
                   <th><button class="sort-btn" data-sort="pb" type="button">P/B</button></th>
                   <th><button class="sort-btn" data-sort="roe" type="button">ROE %</button></th>
